@@ -33,7 +33,7 @@ func (w *ParallelStreamWriter) Add(operation, entity string) {
 func (w *ParallelStreamWriter) WriteInitial(operation, entity, status string) {
 
 	str := "%-" + strconv.Itoa(w.width) + "v ... %s\r\n"
-	fmt.Printf(fmt.Sprintf(str, fmt.Sprintf("%s %s", operation, entity), status))
+	w.stream.Write([]byte(fmt.Sprintf(str, fmt.Sprintf("%s %s", operation, entity), status)))
 }
 
 // Write :
@@ -46,15 +46,15 @@ func (w *ParallelStreamWriter) Write(operation, entity, status string) {
 	diff := len(w.lines) - position
 
 	// move up
-	fmt.Printf("%c[%dA", 27, diff)
+	w.stream.Write([]byte(fmt.Sprintf("%c[%dA", 27, diff)))
 
 	// erase
-	fmt.Printf("%c[2K\r", 27)
+	w.stream.Write([]byte(fmt.Sprintf("%c[2K\r", 27)))
 	str := "%-" + strconv.Itoa(w.width) + "v ... %s\r"
-	fmt.Printf(fmt.Sprintf(str, id, status))
+	w.stream.Write([]byte(fmt.Sprintf(str, id, status)))
 
 	// move back down
-	fmt.Printf("%c[%dB", 27, diff)
+	w.stream.Write([]byte(fmt.Sprintf("%c[%dB", 27, diff)))
 	w.mux.Unlock()
 
 }

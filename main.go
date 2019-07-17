@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"os"
 	"sync"
 	"time"
 
@@ -10,7 +11,7 @@ import (
 
 func main() {
 
-	w := writer.New(nil, 5)
+	w := writer.New(os.Stdout, 5)
 
 	w.Add("Doing", "task1")
 	w.Add("Doing", "task2")
